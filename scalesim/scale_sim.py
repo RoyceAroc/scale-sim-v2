@@ -1,7 +1,7 @@
 import os
-from scalesim.scale_config import scale_config
-from scalesim.topology_utils import topologies
-from scalesim.simulator import simulator as sim
+from scale_config import scale_config
+from topology_utils import topologies
+from simulator import simulator as sim
 
 
 class scalesim:
@@ -47,16 +47,10 @@ class scalesim:
             else:
                 self.topology_file = topology_filename
 
-        if not os.path.exists(config_filename):
-            print("ERROR: scalesim.scale.py: Config file not found") 
-            print("Input file:" + config_filename)
-            print('Exiting')
-            exit()
-        else: 
-            self.config_file = config_filename
+    
 
         # Parse config first
-        self.config.read_conf_file(self.config_file)
+        self.config.read_conf_file(config_filename)
 
         # Take the CLI topology over the one in config
         # If topology is not passed from CLI take the one from config
@@ -83,7 +77,8 @@ class scalesim:
             verbosity=self.verbose_flag,
             save_trace=save_trace
         )
-        self.run_once()
+        output = self.run_once()
+        return output
 
     def run_once(self):
 
@@ -102,7 +97,7 @@ class scalesim:
         #    save_trace=save_trace,
         #    verbosity=self.verbose_flag
         #)
-        self.runner.run()
+        output = self.runner.run()
         self.run_done_flag = True
 
         #self.runner.generate_all_logs()
@@ -111,7 +106,8 @@ class scalesim:
         if self.verbose_flag:
             print("************ SCALE SIM Run Complete ****************")
 
-    #
+        return output
+    #   
     def print_run_configs(self):
         df_string = "Output Stationary"
         df = self.config.get_dataflow()

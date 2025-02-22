@@ -26,16 +26,9 @@ class scale_config:
 
     #
     def read_conf_file(self, conf_file_in):
+        arr = conf_file_in
 
-        me = 'scale_config.' + 'read_conf_file()'
-
-        config = cp.ConfigParser()
-        config.read(conf_file_in)
-
-        section = 'general'
-        self.run_name = config.get(section, 'run_name')
-
-        # Anand: ISSUE #2. Patch
+        '''
         section = 'run_presets'
         bw_mode_string = config.get(section, 'InterfaceBandwidth')
         if bw_mode_string == 'USER':
@@ -48,6 +41,9 @@ class scale_config:
             return
 
         section = 'architecture_presets'
+        '''
+        self.use_user_bandwidth = True
+        '''
         self.array_rows = int(config.get(section, 'ArrayHeight'))
         self.array_cols = int(config.get(section, 'ArrayWidth'))
         self.ifmap_sz_kb = int(config.get(section, 'ifmapsramszkB'))
@@ -57,21 +53,35 @@ class scale_config:
         self.filter_offset = int(config.get(section, 'FilterOffset'))
         self.ofmap_offset = int(config.get(section, 'OfmapOffset'))
         self.df = config.get(section, 'Dataflow')
-
+        '''
+        self.array_rows = arr[0]
+        self.array_cols = arr[1]
+        self.ifmap_sz_kb = arr[2]
+        self.filter_sz_kb = arr[3]
+        self.ofmap_sz_kb = arr[4]
+        self.ifmap_offset = 0
+        self.filter_offset = 10000000
+        self.ofmap_offset = 20000000
+        self.df = arr[5]
+        
         # Anand: ISSUE #2. Patch
-        if self.use_user_bandwidth:
+ 
+        '''if self.use_user_bandwidth:
             self.bandwidths = [int(x.strip())
                                for x in config.get(section, 'Bandwidth').strip().split(',')]
+        '''
 
+        self.bandwidths = [50]
+        '''
         if self.df not in self.valid_df_list:
             print("WARNING: Invalid dataflow")
 
         if config.has_section('network_presets'):  # Read network_presets
             self.topofile = config.get(section, 'TopologyCsvLoc').split('"')[1]
+        '''
 
         self.valid_conf_flag = True
-
-    #
+    
     def update_from_list(self, conf_list):
         if not len(conf_list) > 11:
             print("ERROR: scale_config.update_from_list: "

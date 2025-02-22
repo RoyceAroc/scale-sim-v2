@@ -1,8 +1,8 @@
 import os
 
-from scalesim.scale_config import scale_config as cfg
-from scalesim.topology_utils import topologies as topo
-from scalesim.single_layer_sim import single_layer_sim as layer_sim
+from scale_config import scale_config as cfg
+from topology_utils import topologies as topo
+from single_layer_sim import single_layer_sim as layer_sim
 
 
 class simulator:
@@ -44,6 +44,7 @@ class simulator:
 
     #
     def run(self):
+        scores = []
         assert self.params_set_flag, 'Simulator parameters are not set'
 
         # 1. Create the layer runners for each layer
@@ -72,7 +73,7 @@ class simulator:
 
             if self.verbose:
                 layer_id = single_layer_obj.get_layer_id()
-                print('\nRunning Layer ' + str(layer_id))
+                print('\nRunning Layer' + str(layer_id))
 
             single_layer_obj.run()
 
@@ -83,17 +84,19 @@ class simulator:
                 util = comp_items[2]
                 mapping_eff = comp_items[3]
                 print('Compute cycles: ' + str(comp_cycles))
-                print('Stall cycles: ' + str(stall_cycles))
-                print('Overall utilization: ' + "{:.2f}".format(util) +'%')
+                #print('Stall cycles: ' + str(stall_cycles))
+                #print('Overall utilization: ' + "{:.2f}".format(util) +'%')
                 print('Mapping efficiency: ' + "{:.2f}".format(mapping_eff) +'%')
 
                 avg_bw_items = single_layer_obj.get_bandwidth_report_items()
                 avg_ifmap_bw = avg_bw_items[3]
                 avg_filter_bw = avg_bw_items[4]
                 avg_ofmap_bw = avg_bw_items[5]
-                print('Average IFMAP DRAM BW: ' + "{:.3f}".format(avg_ifmap_bw) + ' words/cycle')
-                print('Average Filter DRAM BW: ' + "{:.3f}".format(avg_filter_bw) + ' words/cycle')
-                print('Average OFMAP DRAM BW: ' + "{:.3f}".format(avg_ofmap_bw) + ' words/cycle')
+                #print('Average IFMAP DRAM BW: ' + "{:.3f}".format(avg_ifmap_bw) + ' words/cycle')
+                #print('Average Filter DRAM BW: ' + "{:.3f}".format(avg_filter_bw) + ' words/cycle')
+                #print('Average OFMAP DRAM BW: ' + "{:.3f}".format(avg_ofmap_bw) + ' words/cycle')
+
+                scores.append((str(comp_cycles), mapping_eff))
 
             if self.save_trace:
                 if self.verbose:
@@ -106,8 +109,12 @@ class simulator:
 
         self.generate_reports()
 
+        return scores
+
     #
     def generate_reports(self):
+        None
+        '''
         assert self.all_layer_run_done, 'Layer runs are not done yet'
 
         compute_report_name = self.top_path + '/COMPUTE_REPORT.csv'
@@ -155,7 +162,7 @@ class simulator:
         compute_report.close()
         bandwidth_report.close()
         detail_report.close()
-
+        '''
     #
     def get_total_cycles(self):
         assert self.all_layer_run_done, 'Layer runs are not done yet'

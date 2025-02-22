@@ -64,6 +64,7 @@ class topologies(object):
                 continue
             else:
                 elems = row.split(',')[:-1]
+                print(elems)
                 assert len(elems) > 3, 'There should be at least 4 entries per row'
                 layer_name = elems[0].strip()
                 m = elems[1].strip()
@@ -103,6 +104,7 @@ class topologies(object):
                 else:
                     layer_name = elems[0].strip()
                     self.append_topo_arrays(layer_name, elems)
+                print(layer_name, elems)
 
         self.num_layers = len(self.topo_arrays)
         self.topo_load_flag = True
