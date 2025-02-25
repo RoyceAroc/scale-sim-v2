@@ -66,12 +66,7 @@ class scale_config:
         
         # Anand: ISSUE #2. Patch
  
-        '''if self.use_user_bandwidth:
-            self.bandwidths = [int(x.strip())
-                               for x in config.get(section, 'Bandwidth').strip().split(',')]
-        '''
-
-        self.bandwidths = [50]
+        self.bandwidths = [arr[6]]
         '''
         if self.df not in self.valid_df_list:
             print("WARNING: Invalid dataflow")

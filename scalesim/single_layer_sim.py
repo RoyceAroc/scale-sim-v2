@@ -7,7 +7,7 @@ from compute.systolic_compute_os import systolic_compute_os
 from compute.systolic_compute_ws import systolic_compute_ws
 from compute.systolic_compute_is import systolic_compute_is
 from memory.double_buffered_scratchpad_mem import double_buffered_scratchpad as mem_dbsp
-
+from memory.double_buffered_tutorial2_scratchpad_mem import double_buffered_scratchpad as tut2mem
 
 class single_layer_sim:
     def __init__(self):
@@ -17,7 +17,8 @@ class single_layer_sim:
 
         self.op_mat_obj = opmat()
         self.compute_system = systolic_compute_os()
-        self.memory_system = mem_dbsp()
+        # self.memory_system = mem_dbsp()
+        self.memory_system = tut2mem()
 
         self.verbose = True
 
@@ -98,7 +99,7 @@ class single_layer_sim:
 
     # This communicates that the memory is being managed externally
     # And the class will not interfere with setting it up
-    def set_memory_system(self, mem_sys_obj=mem_dbsp()):
+    def set_memory_system(self, mem_sys_obj=tut2mem()):
         self.memory_system = mem_sys_obj
         self.memory_system_ready_flag = True
 
